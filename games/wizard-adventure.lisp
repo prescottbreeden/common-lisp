@@ -13,10 +13,10 @@
                         (attic (living-room downstairs ladder))))
 
 ; objects :: all objects
-(defparameter *objects* '(whisky bucket frog chain welding-torch))
+(defparameter *objects* '(whiskey bucket frog chain welding-torch))
 
 ; object-locations :: where objects are located
-(defparameter *object-locations* '((whisky living-room)
+(defparameter *object-locations* '((whiskey living-room)
                                    (bucket living-room)
                                    (chain garden)
                                    (frog garen)
@@ -47,3 +47,21 @@
   (append (describe-location *location* *nodes*)
           (describe-paths *location* *edges*)
           (describe-objects *location* *objects* *object-locations*)))
+
+(defun walk (direction)
+  (let ((next (find direction
+                    (cdr (assoc *location* *edges*))
+                    :key #'cadr)))
+    (if next
+      (progn (setf *location* (car next))
+             (look))
+      '(you cannot go that way.))))
+
+(defun pickup (object)
+  (cond ((member object (objects-at *location* *objects* *object-locations*))
+         (push (list object 'body) *object-locations*)
+         `(you are now carrying the ,object))
+        (t '(you cannot pick that up.))))
+
+(defun inventory ()
+  (cons 'items- (objects-at 'body *objects* *object-locations*)))
