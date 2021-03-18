@@ -5,4 +5,4 @@
 (cadr *test-list*) ; => (A B C)
 (car (cadr *test-list*)) ; => A
 
-
+(lamda (x) (= 0 (mod x 2)))
