@@ -23,6 +23,12 @@
                                    (welding-torch attic)
                                    ))
 
+; (defun game-repl ()
+;   (let ((cmd (game-read)))
+;     (unless (eq (car cmd) 'quit)
+;       (game-print (game-eval dmg))
+;       (game-rpl))))
+
 (defun describe-location (location nodes)
   (cadr (assoc location nodes)))
 
