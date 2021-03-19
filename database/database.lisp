@@ -1,3 +1,11 @@
+;------------------------------------------------------------------------------
+; Relational Database from Scratch
+; TODO
+; - add UPDATE
+; - add tables
+; - add primary key generation
+; - create CLI
+;------------------------------------------------------------------------------
 (defvar *db* nil)
 
 (defun make-cd (title artist rating ripped)
@@ -5,9 +13,11 @@
 
 (defun add-record (cd) (push cd *db*))
 
+(defun pretty-print (cd) 
+  (format t "~{~a:~10t~a~%~}~%" cd))
+
 (defun dump-db ()
-  (dolist (cd *db*)
-    (format t "~{~a:~10t~a~%~}~%" cd)))
+  (dolist (cd *db*) pretty-print))
 
 (defun prompt-read (prompt)
   (format *query-io* "~a: " prompt)
@@ -37,16 +47,17 @@
     (with-standard-io-syntax
       (setf *db* (read in)))))
 
-(defun select-by-artist (artist)
-  (remove-if-not
-    #'(lambda (cd) (equal (getf cd :artist) artist))
-    *db*))
 
 (defun select (selector-fn)
   (remove-if-not selector-fn *db*))
 
-(defun artist-selector (artist) 
-  #'(lambda (cd) (equal (getf cd :artist) artist)))
+(defun where (&key title artist rating (ripped nil ripped-p))
+  #'(lambda (cd)
+      (and
+        (if title     (equal (getf cd :title)   title)  t)
+        (if artist    (equal (getf cd :artist)  artist) t)
+        (if rating    (equal (getf cd :rating)  rating) t)
+        (if ripped-p  (equal (getf cd :ripped)  ripped) t))))
 
 
 ; -----------------------------------------------------------------------------
@@ -63,3 +74,16 @@
 
 (defun remove-bob ()
   (remove-if #'(lambda (x) (string-equal "bob" x)) '("dick" "jane" "bob" "sally")))
+
+(defun foo (&key a b c) (list a b c))
+
+(defun foo-with-defaults (&key a (b 42) (c 30 c-p)) (list a b c c-p))
+
+(defun artist-selector (artist) 
+  #'(lambda (cd) (equal (getf cd :artist) artist)))
+
+(defun select-by-artist (artist)
+  (remove-if-not
+    #'(lambda (cd) (equal (getf cd :artist) artist))
+    *db*))
+
