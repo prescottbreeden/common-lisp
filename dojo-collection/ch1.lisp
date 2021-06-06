@@ -7,15 +7,18 @@
 ; (print *myName*)
 
 (defun clean (some-list)
+  "remove all items from list that are nil"
   (remove-if-not #'(lambda (item)
                      (and (not (eq nil item)))) 
                  some-list))
 
 (defun print-range(start end)
+  "print numbers in range from start to end"
   (loop for n from start to end
         collect (print n)))
 
 (defun dont-worry-be-happy()
+  "say happy happy joy joy 5 times"
   (loop for n from 1 to 5
         collect "happy happy joy joy..."))
 
@@ -127,8 +130,9 @@
         ((< (first arr) (length arr)) 'too-small)
         (t 'just-right)))
 
-(defun fahrenheit-to-celsius()
+(defun fahrenheit->celsius()
   'PASS)
 
-(defun celsius-to-fahrenheit()
+(defun celsius->fahrenheit()
   'PASS)
+
